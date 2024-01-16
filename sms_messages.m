@@ -51,23 +51,25 @@ for thisID = allIDs
     % case 1: send at 20:00 @FIRST day
     if ~isnat(T.Start(thisParent)) &&...                            % make sure the subject has already come
             T.Start(thisParent) == datetime('today') && ...         % --------------------- started today
-            (hours(datetime('now') - datetime('today')) - 20) < 1         % ---------- we go with the evening batch (added check)
-        cmd = sprintf("osascript ./sendsms.scpt ""%s"" """ + msg1N + """", thisPhone, link_)
+            abs(hours(datetime('now') - datetime('today')) - 20) < 1         % ---------- we go with the evening batch (added check)
+        cmd = sprintf("osascript ./sendsms.scpt ""%s"" ""%s %s""" , thisPhone, msg1N, link_)
         system(cmd)
         % case 2: send at 6:30 @EVERY day
     elseif ~isnat(T.Start(thisParent)) &&...
             datetime('today') > T.Start(thisParent) &&...
-            (hours(datetime('now') - datetime('today')) - 6.5) < 1 &&...        %
+            abs(hours(datetime('now') - datetime('today')) - 6.5) < 1 &&...        %
             T.End(thisParent) >= datetime('today')                      % make sure we are not done
         cmd = sprintf("osascript ./sendsms.scpt ""%s"" ""%s""", thisPhone, msgE)
         system(cmd)
         % case 3: send at 20:00 @2-END day
     elseif ~isnat(T.Start(thisParent)) &&...
             datetime('today') > T.Start(thisParent) &&...
-            (hours(datetime('now') - datetime('today')) - 20) < 1 &&...        %
+            abs(hours(datetime('now') - datetime('today')) - 20) < 1 &&...        %
             T.End(thisParent) > datetime('today')                      % make sure we are not done
-        cmd = sprintf("osascript ./sendsms.scpt ""%s"" """ + msg2N + """", thisPhone, link_)
+        cmd = sprintf("osascript ./sendsms.scpt ""%s"" ""%s %s""" , thisPhone, msg2N, link_)
         system(cmd)
+    else
+        warning("no sms sent to " + thisID)
     end
 end
 
