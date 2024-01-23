@@ -40,7 +40,7 @@ for thisID = allIDs
     link_ = T.questionnaireLink(thisParent);
     if strlength(thisPhone) == 8
         thisPhone = "+45" + thisPhone;
-    elseif startsWith(thisPhone) == "+"
+    elseif startsWith(thisPhone, "+")
         % do nothing
     elseif strlength(thisPhone) == 11
         thisPhone = "+" + thisPhone;
